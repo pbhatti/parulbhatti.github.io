@@ -247,7 +247,7 @@ a:hover, button:hover, .project_card:hover {
     }
 
     .project, .project .section_1, .project .section_3 {
-        width: 320px !important;
+        width: 360px !important;
         /* padding: 0 10px; */
     }
     #numberz, #tablehero, #flipkart {
