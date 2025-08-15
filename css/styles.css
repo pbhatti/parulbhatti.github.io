@@ -408,6 +408,36 @@ a:hover, button:hover, .project_card:hover {
         text-align: center !important;
     }
 
+    /* Prevent horizontal scrolling on mobile */
+    html, body {
+        overflow-x: hidden !important;
+        max-width: 100vw !important;
+    }
+
+    /* Ensure all containers respect mobile width */
+    .container, .project_container, .full_container, .mini_container {
+        max-width: 320px !important;
+        overflow-x: hidden !important;
+    }
+
+    /* Ensure images don't overflow */
+    img {
+        max-width: 100% !important;
+        height: auto !important;
+    }
+
+    /* Ensure videos don't overflow */
+    video {
+        max-width: 100% !important;
+        height: auto !important;
+    }
+
+    /* Ensure all content sections respect mobile width */
+    .leftcontent_section, .rightcontent_section, .leftimg_section, .rightimg_section {
+        max-width: 320px !important;
+        overflow-x: hidden !important;
+    }
+
     /* Mobile responsive for project thumbnail */
     .project_thumbnail {
         border-radius: 16px !important;
