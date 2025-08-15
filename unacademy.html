@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Parul Bhatti - Unacademy</title>
+    <meta name="author" content="Parul Bhatti, @parul_bhatti">
+    <meta name="description" content="Portfolio of Parul Bhatti">
+    <meta name="keywords"
+        content="Parul, Bhatti, web standards, CSS, HTML, HTML5, markup, style, web design, web development, ui, ux, bangalore, India">
+    <meta name="viewport" content="width=device-width; initial-scale = 1.0; maximum-scale=1.0; user-scalable=no" />
+    <link rel="icon" href="Images/pb_favicon.png" type="image/png" />
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,700,900" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="css/styles.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
+    <script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-128168370-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'UA-128168370-1');
+    </script>
+</head>
+
+<body>
+    <!--------------------------------------------------SCRIPT STARTS HERE---------------------------------------------------------->
+    <script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
+    <script src="https://unpkg.com/@rive-app/canvas@2.7.0"></script>
+    <script>
+        (function ($) {
+            $(document).ready(function () {
+                $('.main_gallery').flickity({
+                    cellAlign: 'center',
+                    contain: true,
+                    freeScroll: true,
+                    lazyLoad: 1,
+                    imagesLoaded: true
+                });
+                //your code here
+            });
+        })(jQuery)
+    </script>
+    <script>
+        $(document).ready(function () {
+            $(document).on("scroll", onScroll);
+
+            //smoothscroll
+            $('a[href^="#"]').on('click', function (e) {
+                e.preventDefault();
+                $(document).off("scroll");
+
+                $('a').each(function () {
+                    $(this).removeClass('active');
+                })
+                $(this).addClass('active');
+
+                var target = this.hash,
+                    menu = target;
+                $target = $(target);
+                $('html, body').stop().animate({
+                    'scrollTop': $target.offset().top + 2
+                }, 1000, 'swing', function () {
+                    window.location.hash = target;
+                    $(document).on("scroll", onScroll);
+                });
+            });
+
+            // Image Slider Functionality for Multiple Sliders
+            const sliders = document.querySelectorAll('.image-slider');
+            let currentSlider = null;
+            let isDragging = false;
+
+            function updateSlider(slider, position) {
+                const sliderHandle = slider.querySelector('.slider-handle');
+                const sliderAfter = slider.querySelector('.slider-after');
+                const rect = slider.getBoundingClientRect();
+                const x = Math.max(0, Math.min(position - rect.left, rect.width));
+                const percentage = (x / rect.width) * 100;
+
+                sliderHandle.style.left = percentage + '%';
+                sliderAfter.style.clipPath = `polygon(${percentage}% 0, 100% 0, 100% 100%, ${percentage}% 100%)`;
+            }
+
+            function handleMouseDown(e, slider) {
+                isDragging = true;
+                currentSlider = slider;
+                slider.style.cursor = 'grabbing';
+                e.preventDefault();
+            }
+
+            function handleMouseMove(e) {
+                if (!isDragging || !currentSlider) return;
+                updateSlider(currentSlider, e.clientX);
+            }
+
+            function handleMouseUp() {
+                if (currentSlider) {
+                    currentSlider.style.cursor = 'ew-resize';
+                }
+                isDragging = false;
+                currentSlider = null;
+            }
+
+            // Initialize all sliders
+            sliders.forEach(slider => {
+                // Mouse events
+                slider.addEventListener('mousedown', (e) => handleMouseDown(e, slider));
+
+                // Touch events for mobile
+                slider.addEventListener('touchstart', function (e) {
+                    isDragging = true;
+                    currentSlider = slider;
+                    e.preventDefault();
+                });
+
+                slider.addEventListener('touchmove', function (e) {
+                    if (!isDragging || currentSlider !== slider) return;
+                    const touch = e.touches[0];
+                    updateSlider(slider, touch.clientX);
+                    e.preventDefault();
+                });
+
+                slider.addEventListener('touchend', function () {
+                    isDragging = false;
+                    currentSlider = null;
+                });
+
+                // Initialize each slider at 50%
+                updateSlider(slider, slider.getBoundingClientRect().left + slider.getBoundingClientRect().width / 2);
+            });
+
+            // Global mouse events
+            document.addEventListener('mousemove', handleMouseMove);
+            document.addEventListener('mouseup', handleMouseUp);
+
+            // Research Images Carousel Functionality
+            const researchImages = document.querySelectorAll('.research-image');
+            const prevButton = document.querySelector('.carousel-prev');
+            const nextButton = document.querySelector('.carousel-next');
+            let currentImageIndex = 0;
+
+            function showImage(index) {
+                researchImages.forEach((image, i) => {
+                    // Calculate the position in the stack
+                    let stackPosition = (i - index + researchImages.length) % researchImages.length;
+
+                    // Remove all classes first
+                    image.classList.remove('active', 'stack-top', 'stack-middle', 'stack-bottom');
+
+                    // Apply appropriate class based on stack position
+                    if (stackPosition === 0) {
+                        image.classList.add('active', 'stack-top');
+                    } else if (stackPosition === 1) {
+                        image.classList.add('stack-middle');
+                    } else if (stackPosition === 2) {
+                        image.classList.add('stack-bottom');
+                    }
+                });
+            }
+
+            function nextImage() {
+                currentImageIndex = (currentImageIndex + 1) % researchImages.length;
+                showImage(currentImageIndex);
+            }
+
+            function prevImage() {
+                currentImageIndex = (currentImageIndex - 1 + researchImages.length) % researchImages.length;
+                showImage(currentImageIndex);
+            }
+
+            // Initialize carousel
+            showImage(currentImageIndex);
+
+            // Add event listeners for carousel navigation
+            if (prevButton && nextButton) {
+                prevButton.addEventListener('click', prevImage);
+                nextButton.addEventListener('click', nextImage);
+            }
+
+        });
+
+        function onScroll(event) {
+            var scrollPos = $(document).scrollTop();
+            $('#sidenav a').each(function (i) {
+                var currLink = $(this);
+                var refElement = $(currLink.attr("href"));
+                if (refElement.position().top <= scrollPos && refElement.position().top + refElement.height() > scrollPos) {
+                    $('#sidenav ul li a').removeClass("active");
+                    currLink.addClass("active");
+                }
+                else {
+                    currLink.removeClass("active");
+                }
+            });
+        }
+    </script>
+
+    <!--------------------------------------------------SCRIPT ENDS HERE---------------------------------------------------------->
+    <div id="sidenav" class="visible sidenav mob_hide">
+        <ul>
+            <li><a href="#unacademy" class="navlink scroll active navlink_title">Unacademy (2021-24)</a></li>
+            <li><a href="#overview" class="navlink scroll">Project Overview</a></li>
+            <li><a href="#why_redesign" class="navlink scroll">Why Redesign?</a></li>
+            <li><a href="#revamped_mentorship" class="navlink scroll">Revamped Mentorship</a></li>
+            <li><a href="#mentor_notes" class="navlink scroll">Mentor Notes</a></li>
+            <li><a href="#key_learnings" class="navlink scroll">Key Learnings</a></li>
+        </ul>
+    </div>
+
+    <div class="page_wrapper" id="unacademy" id="scroll">
+        <!-- HOME PAGE CONTAINER STARTS -->
+        <main class="content">
+            <header class="container topbar">
+                <!-- HEADER CONTAINER STARTS -->
+                <a href="index.html" alt="Parul Bhatti Logo">
+                    <div class="hero_img" style="width:56px; height:50px"></div>
+                </a>
+                <a href="thoughtspot.html">
+                    <div class="next_project">
+                        <div class="next_icon"></div>
+                        <div class="project_group">
+                            <div class="project_title">ThoughtSpot</div>
+                            <div class="project_time">2020-21</div>
+                        </div>
+                    </div>
+                </a>
+            </header><!-- HEADER CONTAINER ENDS -->
+
+            <div class="project mt100">
+                <!------------------------------------ PROJECT - FULL WIDTH STARTS ------------------------->
+                <div class="mini_container column_container section-1">
+                    <div class="intro_title mb12">Unacademy</div>
+                    <p>Unacademy is India’s largest learning platform, connecting top educators with millions of
+                        learners to democratise education.
+                        I joined as Design Manager in 2021 during rapid scale. I led key projects, grew the team,
+                        mentored designers, and partnered
+                        with leadership on 0 to 1 initiatives. The pace sharpened my leadership and craft while
+                        enforcing rigorous design documentation,
+                        and it remains one of the most coordinated, talented teams I have worked with.</p>
+
+                    <div class="info mob_hide">
+                        <p class="sub_info"><span style="font-weight: bold">Role:&nbsp </span>Design Manager</p>
+                        <p class="sub_info"><span style="font-weight: bold">Platform:&nbsp </span> Web & Mobile</p>
+                        <p class="sub_info"><span style="font-weight: bold">Duration:&nbsp </span> 2021-24</p>
+                    </div>
+                    <div class="mob_info web_hide">
+                        <p class="sub_info"><span style="font-weight: bold">Role:&nbsp </span>Design Manager</p>
+                        <p class="sub_info"><span style="font-weight: bold">Platform:&nbsp </span> Web & Mobile</p>
+                        <p class="sub_info"><span style="font-weight: bold">Duration:&nbsp </span> 2021-24</p>
+                    </div>
+                </div>
+                <div class="container project_thumbnail section_2 mt100">
+                    <img src="Images/unacademy_thumbnail_big.png" class="image mob_hide" alt="Unacademy Learning Platform">
+                    <img src="Images/unacademy_thumbnail.png" class="image web_hide" alt="Unacademy Learning Platform">
+                </div>
+                <div id="overview" class="mini_container column_container mt150 section_3">
+                    <div class="section_title mb12">Redesigning Live Mentorship</div>
+                    <p>The Live Mentorship feature, a key offering for learners on the Iconic Subscription plan,
+                        provided 1:1 guidance from top mentors studying in leading institutes like IITs, AIIMS,
+                        AFMC, etc.
+                        Learners could book sessions with mentors through the Learner’s app.</p>
+                    <br>
+                    <p>The redesign project included a month of research, where we conducted learner, mentors & sales
+                        interviews,
+                        analysed mentor-learner interactions (recorded calls), and identified key gaps in the old
+                        mentorship model.</p>
+
+                    <div class="info mob_hide">
+                        <div class="team-grid">
+                            <div class="team-item">
+                                <p span class="sub_info" style="font-weight: bold">Design & Product team</p>
+                                <p>Anoop, Sudhikksha, Ashish & Parul</p>
+                            </div>
+                            <div class="team-item">
+                                <p span class="sub_info" style="font-weight: bold">Creative team</p>
+                                <p>Anukriti & Kailash</p>
+                            </div>
+                            <div class="team-item mt12">
+                                <p span class="sub_info" style="font-weight: bold">Leadership</p>
+                                <p>Hardik</p>
+                            </div>
+                            <div class="team-item mt12">
+                                <p span class="sub_info" style="font-weight: bold">Duration</p>
+                                <p>4 months</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mob_info web_hide">
+                        <div class="team-grid">
+                            <div class="team-item">
+                                <h4 class="team-title">Design & Product team</h4>
+                                <p>Anoop, Sudhikksha, Ashish & Parul</p>
+                            </div>
+                            <div class="team-item">
+                                <h4 class="team-title">Creative team</h4>
+                                <p>Anukriti & Kailash</p>
+                            </div>
+                            <div class="team-item">
+                                <h4 class="team-title">Leadership</h4>
+                                <p>Hardik</p>
+                            </div>
+                            <div class="team-item">
+                                <h4 class="team-title">Duration</h4>
+                                <p>4 months</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <!------------------------------------ SECTION 4 STARTS HERE ------------------------->
+                <div id="why_redesign" class="mini_container column_container section_4 mt100">
+                    <div class="section_title caption_left">WHY REDESIGN?</div>
+                    <div class="section_title mb12">Old Offering - 1:1 Live Mentorship (2021-2022)</div>
+                    <p>The old mentorship model faced several limitations that hindered its effectiveness:</p>
+
+                    <div class="limitations-grid">
+                        <div class="limitation-item">
+                            <p><span style="font-weight: bold">Learner-Initiated Sessions:</span> Mentors were randomly
+                                assigned during booking, leading to inconsistent and unstructured interactions.</p>
+                        </div>
+                        <div class="limitation-item">
+                            <p><span style="font-weight: bold">Lack of Continuity:</span> Frequent mentor changes made
+                                it difficult for learners to build rapport or receive consistent guidance.</p>
+                        </div>
+                        <div class="limitation-item">
+                            <p><span style="font-weight: bold">No Follow-Ups:</span> Learners received minimal support
+                                post-session, leading to disengagement and lack of long-term progress tracking.</p>
+                        </div>
+                        <div class="limitation-item">
+                            <p><span style="font-weight: bold">No Flexibility:</span> Learners couldn't reschedule
+                                sessions, causing inconvenience and loss of unused credits.</p>
+                        </div>
+                    </div>
+
+                    <div class="metrics-container">
+                            <div class="metric-card-red">
+                                <img class="metric-icon" src="Images/thumbsDown.svg" alt="Thumbs Down Icon" width="24" height="24">
+                                <div class="metric-content">
+                                    <div class="metric-value">30-50% learner satisfaction score</div>
+                                    <div class="metric-description">Poor score due to inconsistent mentor interactions and
+                                        lack of continuity.</div>
+                                </div>
+                            </div>
+                            <div class="metric-card-red">
+                                <img class="metric-icon" src="Images/thumbsDown.svg" alt="Thumbs Down Icon" width="24" height="24">
+                                <div class="metric-content">
+                                    <div class="metric-value">15-20% of learner engagement rate</div>
+                                    <div class="metric-description">Few learners actively engaged in mentorship sessions.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="metric-card-red">
+                                <img class="metric-icon" src="Images/thumbsDown.svg" alt="Thumbs Down Icon" width="24" height="24">
+                                <div class="metric-content">
+                                    <div class="metric-value">30-40% of learner retention rate</div>
+                                    <div class="metric-description">Many learners dropped off after initial sessions.</div>
+                                </div>
+                            </div>
+                    </div>
+                </div>
+                <!------------------------------------ SECTION 4 ENDS HERE ------------------------->
+                <!------------------------------------ SECTION 5 STARTS HERE ------------------------->
+                <div id="revamped_mentorship" class="research-section section_5 mt100">
+                    <div class="research-container">
+                        <!-- Left aligned div with stacked photo carousel -->
+                        <div class="research-left">
+                            <div class="gallery-container">
+                                <div class="image-container">
+                                    <div class="research-image active">
+                                        <img src="Images/research1.png" alt="Research 1" />
+                                    </div>
+                                    <div class="research-image">
+                                        <img src="Images/research2.png" alt="Research 2" />
+                                    </div>
+                                    <div class="research-image">
+                                        <img src="Images/research3.png" alt="Research 3" />
+                                    </div>
+                                </div>
+                                <!-- Carousel Navigation -->
+                                <button class="carousel-nav carousel-prev">
+                                    <img src="Images/leftChevron.svg" alt="Previous" />
+                                </button>
+                                <button class="carousel-nav carousel-next">
+                                    <img src="Images/rightChevron.svg" alt="Next" />
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Right aligned div with text -->
+                        <div class="research-right">
+                            <div class="research-text">
+                                <div class="section_title_white mb12">Revamped Mentorship</div>
+                                <p class="research-description">
+                                    Guided by user research, the mentorship model was changed from a <span
+                                        style="font-weight: bold">learner-initiated</span>,
+                                    unstructured interaction format to a <span
+                                        style="font-weight: bold">mentor-led</span>, personalised experience with
+                                    recurring sessions,
+                                    ensuring consistent guidance and fostering stronger, more impactful mentor-learner
+                                    relationships.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!------------------------------------ SECTION 5 ENDS HERE ------------------------->
+
+                <!-- Before and After Image Slider -->
+                <div class="image-slider-container section_6 mt40">
+                    <div class="image-slider">
+                        <div class="slider-before">
+                            <img src="Images/old_offering.png" alt="Old Offering" class="slider-image">
+                            <div class="slider-label before-label">OLD OFFERING</div>
+                        </div>
+                        <div class="slider-after">
+                            <img src="Images/new_offering.png" alt="New Offering" class="slider-image">
+                            <div class="slider-label after-label">NEW OFFERING</div>
+                        </div>
+                        <div class="slider-handle">
+                            <div class="slider-line"></div>
+                            <div class="slider-circle">
+                                <div class="slider-arrow left-arrow">◀</div>
+                                <div class="slider-arrow right-arrow">▶</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!------------------------------------ SECTION 7 STARTS HERE ------------------------->
+                <div class="container section_7 mt40">
+                    <div class="solutions-grid">
+                        <!-- Solution Card 1 -->
+                        <div class="solution-card">
+                            <div class="gif-container">
+                                <canvas id="rive-canvas-1" class="solution-img"></canvas>
+                            </div> 
+                            <div class="solution-content">
+                                <h3 class="caption_left">DEDICATED MENTORS</h3>
+                                <p class="solution-description">Mentor assignments based on subject expertise, ensuring personalized guidance.</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Solution Card 2 -->
+                        <div class="solution-card">
+                            <div class="gif-container">
+                                <canvas id="rive-canvas-flower" class="solution-img"></canvas>
+                            </div>
+                            <div class="solution-content">
+                                <h3 class="caption_left">INTRODUCTORY CALL</h3>
+                                <p class="solution-description">New learners were introduced to mentors via an automated call within 48 hours, setting study agendas and expectations.</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Solution Card 3 -->
+                        <div class="solution-card">
+                            <div class="gif-container">
+                                <img src="Images/reschedule.gif" alt="Rescheduling Flexibility" class="solution-img" onload="console.log('Reschedule GIF loaded successfully')" onerror="console.error('Failed to load reschedule.gif')">
+                            </div>
+                            <div class="solution-content">
+                                <h3 class="caption_left">RESCHEDULING FLEXIBILITY</h3>
+                                <p class="solution-description">Learners could reschedule sessions, improving convenience.</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Solution Card 4 -->
+                        <div class="solution-card">
+                            <div class="gif-container">
+                                <img src="Images/nudging.png" alt="Nudging Mechanism" class="solution-img">
+                            </div>
+                            <div class="solution-content">
+                                <h3 class="caption_left">NUDGING MECHANISM</h3>
+                                <p class="solution-description">In-app nudge cards to remind learners to book or reschedule their sessions.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!------------------------------------ SECTION 8 STARTS HERE ------------------------->
+                <div id="mentor_notes" class="mini_container column_container section_8 mt100">
+                    <div class="section_title mb12">Introducing mentor notes</div>
+                    <p>Post-session notes capture a structured summary after every call, turning guidance into clear next steps.
+                        Research showed learners wanted mentor-led follow-through, accountability, and transparency.
+                        Learner-visible notes plus mentor-only private notes make progress trackable and cut context reset.</p>              
+                </div>
+
+                 <!------------------------------------ SECTION 9 STARTS HERE ------------------------->
+                <div class="container section_9 mt40">
+                    <!-- Image Container 1 -->
+                    <div class="gif-container-big">
+                        <img src="Images/notes.gif" alt="Mentor Notes" class="gif-image">
+                    </div>
+                    <div class="caption_left mt12">MENTOR WEB APP</div>
+                    <p class="solution-description">Capture structured notes, assign action items, and follow-ups for every learner session.</p>
+                </div>
+
+                <!------------------------------------ SECTION 10 STARTS HERE ------------------------->
+                <div class="container section_10 mt40">
+                    <div class="solutions-grid" style="grid-template-columns: 1fr 1fr; grid-template-rows: 1fr;">
+                        <!-- Solution Card 3 -->
+                        <div class="solution-card">
+                            <div class="gif-container">
+                                <img src="Images/learnerNotes.gif" alt="Learner Notes" class="solution-img" onload="console.log('Reschedule GIF loaded successfully')" onerror="console.error('Failed to load reschedule.gif')">
+                            </div>
+                            <div class="solution-content">
+                                <h3 class="caption_left">LEARNER APP</h3>
+                                <p class="solution-description">Read mentor notes from the past sessions.</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Solution Card 4 -->
+                        <div class="solution-card">
+                            <div class="gif-container">
+                                <img src="Images/mentorNudge.gif" alt="Nudging Mechanism" class="solution-img">
+                            </div>
+                            <div class="solution-content">
+                                <h3 class="caption_left">LEARNER APP</h3>
+                                <p class="solution-description">Nudge to review mentor notes to stay on track.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!------------------------------------ SECTION 10 STARTS HERE ------------------------->
+                <div id="key_learnings" class="mini_container column_container section_10 mt100">
+                    <div class="section_title mb12">Key learnings, Impact & Next steps</div>
+                    <p>A dedicated mentor with an initial ice-breaker established clear ownership from day one. 
+                        Recurring sessions with simple rescheduling reduced friction and kept momentum. 
+                        Post-session Mentor Notes created accountability and continuity, while in-app nudges lifted 
+                        attendance and follow-through.</p>
+
+                        <div class="metrics-container mt40">
+                            <div class="metric-card-green">
+                                <img src="Images/thumbsUp.svg" class="metric-icon" width="24" height="24" alt="Thumbs Up Icon">
+                                <div class="metric-content">
+                                    <div class="metric-value">60–70% learner satisfaction score for mentorship experience.</div>
+                                </div>
+                            </div>
+                            <div class="metric-card-green">
+                                <img src="Images/thumbsUp.svg" class="metric-icon" width="24" height="24" alt="Thumbs Up Icon">
+                                <div class="metric-content">
+                                    <div class="metric-value">30–40% of learner engagement rate in scheduled sessions.</div>
+                                </div>
+                            </div>
+                            <div class="metric-card-green">
+                                <img src="Images/thumbsUp.svg" class="metric-icon" width="24" height="24" alt="Thumbs Down Icon">
+                                <div class="metric-content">
+                                    <div class="metric-value">40–50% monthly retention on mentorship.</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="team-item mt40">
+                            <h4 class="team-title">Leadership decision</h4>
+                            <p class="mt12">Keep Mentorship within Iconic Subscription. Clear learner value and exposure to top-institute mentors; 
+                                solid upward trend in core metrics.</p>
+                        </div>
+
+                        <div class="team-item mt40">
+                            <h4 class="team-title mb12">Next steps</h4>
+                            <p>• Reduce no-shows with smarter nudges and better timing.</p>
+                            <p>• Deepen mentor tools and progress visibility.</p>
+                            <p>• Integrate mentorship touchpoints across classes, tests, and practice.</p>
+                        </div>
+                </div>
+
+            </div><!-- PROJECT CONTAINER ENDS -->
+
+
+            <!-- FOOTER STARTS HERE -->
+            <footer class="project_4 mb30 mt150">
+                <div class="footer-container">
+                    <!-- Logo Section -->
+                    <div class="footer-logo">
+                        <a href="index.html" alt="Parul Bhatti Logo">
+                            <div class="hero_img" style="width:55px; height:50px"></div>
+                        </a>
+                    </div>
+
+                    <!-- Socials Section -->
+                    <div class="footer-socials">
+                        <div class="socials-content">
+                            <div class="socials-links">
+                                <a href="mailto:parul.bhatti@gmail.com?Subject=Hello" target="_top"
+                                    class="contact">Email</a>
+                                <span class="separator">•</span>
+                                <a href="https://www.instagram.com/popping_bubblewrap?igsh=cHF5Z250Z2p4Ynd4&utm_source=qr" target="_blank"
+                                    class="contact">Instagram</a>
+                                <span class="separator">•</span>
+                                <a href="https://twitter.com/parul_bhatti" target="_blank" class="contact">Twitter</a>
+                                <span class="separator">•</span>
+                                <a href="https://dribbble.com/pa_rulz" target="_blank" class="contact">Dribbble</a>
+                            </div>
+                            <div class="footer-message">Last updated, Jul 2025</div>
+                        </div>
+                    </div>
+
+                    <!-- Navigation Section -->
+                    <div class="footer-nav">
+                        <a href="thoughtspot.html">
+                            <div class="next_project">
+                                <div class="next_icon"></div>
+                                <div class="project_group">
+                                    <div class="project_title">ThoughtSpot</div>
+                                    <div class="project_time">2020-21</div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </footer><!-- FOOTER CONTAINER ENDS -->
+
+        </main>
+    </div><!-- HOME PAGE CONTAINER ENDS -->
+    
+    <!-- Rive Animation Initialization -->
+    <script>
+        // Initialize Rive animations when the page loads
+        document.addEventListener('DOMContentLoaded', async function() {
+            const { Rive } = window.rive;
+            
+            // Load the handwave animation for both canvases
+            const riveFile = 'Images/handwave.riv';
+            
+            // Function to set up high-DPI canvas
+            function setupCanvas(canvas) {
+                const ctx = canvas.getContext('2d');
+                
+                // Use the working configuration: 700x800 internal size, 350x400 display size
+                const internalWidth = 700;
+                const internalHeight = 800;
+                const displayWidth = 350;
+                const displayHeight = 400;
+                
+                // Set the actual size in memory (700x800 for high resolution)
+                canvas.width = internalWidth;
+                canvas.height = internalHeight;
+                
+                // Set the CSS size to the display size (350x400)
+                canvas.style.width = displayWidth + 'px';
+                canvas.style.height = displayHeight + 'px';
+            }
+            
+            try {
+                // Initialize first canvas (handwave animation)
+                const canvas1 = document.getElementById('rive-canvas-1');
+                if (canvas1) {
+                    setupCanvas(canvas1);
+                    const rive1 = new Rive({
+                        src: riveFile,
+                        canvas: canvas1,
+                        autoplay: true,
+                        stateMachines: 'State Machine 1',
+                        onLoad: () => {
+                            console.log('Rive handwave animation loaded successfully');
+                        }
+                    });
+                }
+                
+                // Initialize flower canvas
+                const canvasFlower = document.getElementById('rive-canvas-flower');
+                if (canvasFlower) {
+                    console.log('Found flower canvas, setting up...');
+                    setupCanvas(canvasFlower);
+                    const riveFlower = new Rive({
+                        src: 'Images/flower.riv',
+                        canvas: canvasFlower,
+                        autoplay: true,
+                        stateMachines: 'State Machine 1',
+                        onLoad: () => {
+                            console.log('Rive flower animation loaded successfully');
+                        },
+                        onError: (error) => {
+                            console.error('Error loading flower animation:', error);
+                        }
+                    });
+                } else {
+                    console.error('Flower canvas not found!');
+                }
+                
+                // Initialize second canvas (handwave animation)
+                const canvas2 = document.getElementById('rive-canvas-2');
+                if (canvas2) {
+                    setupCanvas(canvas2);
+                    const rive2 = new Rive({
+                        src: riveFile,
+                        canvas: canvas2,
+                        autoplay: true,
+                        stateMachines: 'State Machine 1',
+                        onLoad: () => {
+                            console.log('Rive animation 2 loaded successfully');
+                        }
+                    });
+                }
+            } catch (error) {
+                console.error('Error loading Rive animations:', error);
+            }
+        });
+    </script>
+</body>
+
+</html>

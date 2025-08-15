@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Parul Bhatti - ThoughtSpot</title>
+    <meta name="author" content="Parul Bhatti, @parul_bhatti">
+    <meta name="description" content="Portfolio of Parul Bhatti">
+    <meta name="keywords" content="Parul, Bhatti, web standards, CSS, HTML, HTML5, markup, style, web design, web development, ui, ux, bangalore, India">
+    <meta name="viewport" content="width=device-width; initial-scale = 1.0; maximum-scale=1.0; user-scalable=no" />
+    <link rel="icon" href="Images/pb_favicon.png" type="image/png"/>
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,700,900" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="css/styles.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
+    <script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-128168370-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-128168370-1');
+    </script>
+</head>
+
+<body>
+    <!--------------------------------------------------SCRIPT STARTS HERE---------------------------------------------------------->
+    <script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
+    <script>
+        (function ($) {
+            $(document).ready(function () {
+                $('.main_gallery').flickity({
+                    cellAlign: 'center',
+                    contain: true,
+                    freeScroll: true,
+                    lazyLoad: 1,
+                    imagesLoaded: true
+                });
+                //your code here
+            });
+        })(jQuery)
+    </script>
+    <script>
+        $(document).ready(function () {
+            $(document).on("scroll", onScroll);
+
+            //smoothscroll
+            $('a[href^="#"]').on('click', function (e) {
+                e.preventDefault();
+                $(document).off("scroll");
+
+                $('a').each(function () {
+                    $(this).removeClass('active');
+                })
+                $(this).addClass('active');
+
+                var target = this.hash,
+                    menu = target;
+                $target = $(target);
+                $('html, body').stop().animate({
+                    'scrollTop': $target.offset().top + 2
+                }, 1000, 'swing', function () {
+                    window.location.hash = target;
+                    $(document).on("scroll", onScroll);
+                });
+            });
+
+            // Image Slider Functionality for Multiple Sliders
+            const sliders = document.querySelectorAll('.image-slider');
+            let currentSlider = null;
+            let isDragging = false;
+
+            function updateSlider(slider, position) {
+                const sliderHandle = slider.querySelector('.slider-handle');
+                const sliderAfter = slider.querySelector('.slider-after');
+                const rect = slider.getBoundingClientRect();
+                const x = Math.max(0, Math.min(position - rect.left, rect.width));
+                const percentage = (x / rect.width) * 100;
+                
+                sliderHandle.style.left = percentage + '%';
+                sliderAfter.style.clipPath = `polygon(${percentage}% 0, 100% 0, 100% 100%, ${percentage}% 100%)`;
+            }
+
+            function handleMouseDown(e, slider) {
+                isDragging = true;
+                currentSlider = slider;
+                slider.style.cursor = 'grabbing';
+                e.preventDefault();
+            }
+
+            function handleMouseMove(e) {
+                if (!isDragging || !currentSlider) return;
+                updateSlider(currentSlider, e.clientX);
+            }
+
+            function handleMouseUp() {
+                if (currentSlider) {
+                    currentSlider.style.cursor = 'ew-resize';
+                }
+                isDragging = false;
+                currentSlider = null;
+            }
+
+            // Initialize all sliders
+            sliders.forEach(slider => {
+                // Mouse events
+                slider.addEventListener('mousedown', (e) => handleMouseDown(e, slider));
+
+                // Touch events for mobile
+                slider.addEventListener('touchstart', function(e) {
+                    isDragging = true;
+                    currentSlider = slider;
+                    e.preventDefault();
+                });
+
+                slider.addEventListener('touchmove', function(e) {
+                    if (!isDragging || currentSlider !== slider) return;
+                    const touch = e.touches[0];
+                    updateSlider(slider, touch.clientX);
+                    e.preventDefault();
+                });
+
+                slider.addEventListener('touchend', function() {
+                    isDragging = false;
+                    currentSlider = null;
+                });
+
+                // Initialize each slider at 50%
+                updateSlider(slider, slider.getBoundingClientRect().left + slider.getBoundingClientRect().width / 2);
+            });
+
+            // Global mouse events
+            document.addEventListener('mousemove', handleMouseMove);
+            document.addEventListener('mouseup', handleMouseUp);
+        });
+
+        function onScroll(event) {
+            var scrollPos = $(document).scrollTop();
+            $('#sidenav a').each(function (i) {
+                var currLink = $(this);
+                var refElement = $(currLink.attr("href"));
+                if (refElement.position().top <= scrollPos && refElement.position().top + refElement.height() > scrollPos) {
+                    $('#sidenav ul li a').removeClass("active");
+                    currLink.addClass("active");
+                }
+                else {
+                    currLink.removeClass("active");
+                }
+            });
+        }
+    </script>
+
+    <!--------------------------------------------------SCRIPT ENDS HERE---------------------------------------------------------->
+    <div id="sidenav" class="visible sidenav mob_hide">
+        <ul>
+            <li><a href="#thoughtspot" class="navlink scroll active navlink_title">ThoughtSpot (2020-21)</a></li>
+            <li><a href="#analytics" class="navlink scroll">Pinboard Redesign</a></li>
+            <li><a href="#modes" class="navlink scroll">Modes</a></li>
+            <li><a href="#tabs" class="navlink scroll">Tabs</a></li>
+            <li><a href="#resize" class="navlink scroll">Resize Tiles</a></li>
+            <li><a href="#pin_to_pinboard" class="navlink scroll">Pin to Pinboard</a></li>
+            <li><a href="#project_status" class="navlink scroll">Project Status</a></li>
+        </ul>
+    </div>
+
+    <div class="page_wrapper" id="thoughtspot" id="scroll">
+        <!-- HOME PAGE CONTAINER STARTS -->
+        <main class="content">
+            <header class="container topbar">
+                <!-- HEADER CONTAINER STARTS -->
+                <a href="index.html" alt="Parul Bhatti Logo"><div class="hero_img" style="width:56px; height:50px"></div></a>
+                <a href="numberz.html">
+                    <div class="next_project">
+                        <div class="next_icon"></div>
+                        <div class="project_group">
+                            <div class="project_title">numberz</div>
+                            <div class="project_time">2017-18</div>
+                        </div>
+                    </div>
+                </a>
+            </header><!-- HEADER CONTAINER ENDS -->
+
+            <div class="project mt100">
+                <!------------------------------------ PROJECT - FULL WIDTH STARTS ------------------------->
+                <div class="mini_container column_container section-1">
+                    <div class="intro_title titleColor mb12">ThoughtSpot</div>
+                    <p>ThoughtSpot is an AI-powered analytics platform that allows users to search and analyze data using natural language, 
+                        making it accessible to anyone in a business, not just data analysts. I worked remotely with their Bangalore hub, 
+                        to design concepts as a lead designer for self-service data analytics tools for business users and analysts.</p>
+
+                    <div class="info mob_hide">
+                        <p class="sub_info"><span class="titleColor" style="font-weight: bold">Role:&nbsp </span>Lead product designer</p>
+                        <p class="sub_info"><span class="titleColor" style="font-weight: bold">Platform:&nbsp </span> Web</p>
+                        <p class="sub_info"><span class="titleColor" style="font-weight: bold">Duration:&nbsp </span> 2020-21</p>
+                    </div>
+                    <div class="mob_info web_hide">
+                        <p class="sub_info"><span class="titleColor" style="font-weight: bold">Role:&nbsp </span>Lead product designer</p>
+                        <p class="sub_info"><span class="titleColor" style="font-weight: bold">Platform:&nbsp </span> Web</p>
+                        <p class="sub_info"><span class="titleColor" style="font-weight: bold">Duration:&nbsp </span> 2020-21</p>
+                    </div>
+                </div>
+                <div class="container project_thumbnail section_2 mt70">
+                    <img src="Images/thoughtspot_thumbnail_big.png" class="image mob_hide" alt="ThoughtSpot Analytics Platform">
+                    <img src="Images/thoughtspot_thumbnail.png" class="image web_hide" alt="ThoughtSpot Analytics Platform">
+                </div>
+                <div id="analytics" class="mini_container column_container mt150 section_3">
+                    <div class="section_title titleColor mb12">Pinboard Redesign</div>
+                    <p>A Pinboard in the ThoughtSpot product is a visual dashboard where users, primarily analysts and business teams, can save, organize, 
+                        and consume charts derived from underlying datasets. It served as a critical artifact for sharing insights, enabling stakeholders 
+                        to quickly review filtered visualizations.</p>
+                    <br>
+                    <p class="bold mb8">Why Redesign?</p>
+                    <p>• Rapid adoption overloaded Pinboards built on a limited 4-column layout, slowing navigation and insight discovery.</p>
+                    <p>• No structure for organizing charts made scale and reuse difficult.</p>
+                    <p>• Long scrolls created friction for both consumption and collaboration.</p>
+                    <p>• Needed a modular, role-aware foundation for enterprise-ready dashboards.</p>
+                    <br>
+                    <p class="bold mb8">Key foundation of Redesign</p>
+                    <p>• <span class="bold">12-Column Grid:</span> Flexible, high-density layouts for scalable storytelling.</p>
+                    <p>• <span class="bold">Modes:</span> Clear split between View (consumption) and Edit (creation) to reduce friction.</p>
+                    <p>• <span class="bold">Tabs:</span> Structured navigation for large, complex dashboards.</p>
+                    <p>• <span class="bold">Smarter Pinning:</span> Encouraged thoughtful curation to reduce clutter and duplication.</p>
+                </div>
+                
+                <!-- Before and After Image Slider -->
+                <div class="image-slider-container section_4 mt70">
+                    <div class="image-slider">
+                        <div class="slider-before">
+                            <img src="Images/pinboard_before.png" alt="Pinboard Before" class="slider-image">
+                            <div class="slider-label before-label">BEFORE</div>
+                        </div>
+                        <div class="slider-after">
+                            <img src="Images/pinboard_after.png" alt="Pinboard After" class="slider-image">
+                            <div class="slider-label after-label">AFTER</div>
+                        </div>
+                        <div class="slider-handle">
+                            <div class="slider-line"></div>
+                            <div class="slider-circle">
+                                <div class="slider-arrow left-arrow">◀</div>
+                                <div class="slider-arrow right-arrow">▶</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Mode text starts -->
+                <div id="modes" class="mini_container column_container section_5 mt150">
+                    <div class="section_title  titleColor mb12">Introducing MODES: View & Edit</div>
+                    <p>To better support both business users and analysts, we introduced MODES: View for consumption and Edit for creation. 
+                        This shift resolved long-standing UX friction where all actions were previously bundled into a single, undifferentiated interface.</p>
+                    <br>
+                    <p class="bold mb8">Why MODES?</p>
+                    <p>• Aligned actions to user intent: business consumption vs analyst authoring.</p>
+                    <p>• Prevented accidental edits and confusion in shared dashboards.</p>
+                    <p>• Created a scalable foundation for future editing and customisation tools.</p>
+                    <p>• Enabled clearer permission and role-based access models.</p>
+                </div>
+
+                <!-- Before and After Image Slider -->
+                <div class="image-slider-container section_6 mt70">
+                    <div class="image-slider">
+                        <div class="slider-before">
+                            <img src="Images/VIEW MODE.png" alt="Pinboard View Mode" class="slider-image">
+                            <div class="slider-label before-label">VIEW MODE</div>
+                        </div>
+                        <div class="slider-after">
+                            <img src="Images/EDIT MODE.png" alt="Pinboard Edit Mode" class="slider-image">
+                            <div class="slider-label after-label">EDIT MODE</div>
+                        </div>
+                        <div class="slider-handle">
+                            <div class="slider-line"></div>
+                            <div class="slider-circle">
+                                <div class="slider-arrow left-arrow">◀</div>
+                                <div class="slider-arrow right-arrow">▶</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mode text continues -->
+                <div id="modes" class="mini_container column_container section_6 mt70">
+                    <p class="bold mb8">View Mode (Consumption)</p>
+                    <p>Tailored for business users, View Mode is a clean, protected environment for consuming insights. 
+                        All features here are geared toward browsing, sharing, filtering, and understanding data without 
+                        the risk of accidental edits.</p>
+                    <br>
+                    <p class="bold mb8">Edit Mode (Creation)</p>
+                    <p>Designed for analysts and power users, Edit Mode enables chart manipulation, tile resizing, 
+                        section editing, note tiles editing and more. It exposes advanced controls for refining how data 
+                        is displayed and organized for broader consumption.</p>
+                </div>
+
+                <!-- Pinboard Tab starts -->
+                <div id="tabs" class="mini_container column_container section_7 mt150">
+                    <div class="section_title titleColor mb12">Introducing Pinboard Tabs</div>
+                    <p>With growing chart density, users needed a way to group related content within a Pinboard. 
+                        Just as sections help structure long reports, Tabs act as navigable buckets inside a dashboard. 
+                        These were especially beneficial for enterprise customers with complex reporting needs.</p>
+                    <br>
+                    <p class="bold mb8">Why TABS?</p>
+                    <p>• Organise large dashboards into thematic sections (e.g., Sales, Marketing, Operations).</p>
+                    <p>• Improve navigation and reduce scroll.</p>
+                    <p>• Enable modular thinking in dashboard design.</p>
+                    <p>• Increase visual clarity and cognitive ease.</p>
+                </div>
+
+                <!-- Tabs gif starts -->
+                <div class="container section_8 mt70">
+                    <!-- Image Container 1 -->
+                    <div class="gif-container-small">
+                        <img src="Images/create_tab.gif" alt="Create Tab Demo" class="gif-image">
+                    </div>
+                    <div class="caption_left mt12">CREATE TAB</div>
+                    
+                    <!-- Image Container 2 -->
+                    <div class="gif-container-small mt40">
+                        <img src="Images/edit_tabs.gif" alt="Edit Tabs Demo" class="gif-image">
+                    </div>
+                    <div class="caption_left mt12">EDIT TABS</div>
+                    
+                    <!-- Image Container 3 -->
+                    <div class="gif-container-small mt40">
+                        <img src="Images/reorder_tabs.gif" alt="Reorder Tabs Demo" class="gif-image">
+                    </div>
+                    <div class="caption_left mt12">REORDER TABS</div>
+                </div>
+
+                <!-- Resize text starts -->
+                <div id="resize" class="mini_container column_container section_9 mt150">
+                    <div class="section_title titleColor mb12">Resizing Tiles (Edit Mode Only)</div>
+                    <p>Previously limited to fixed sizes, charts on Pinboards lacked layout flexibility. 
+                        The redesign introduces tile resizing, 
+                        allowing authors to define focus, hierarchy, and content types more effectively.</p>
+                    <br>
+                    <p class="bold mb8">Why Resizing matters?</p>
+                    <p>• Better space utilization with a 12-column grid.</p>
+                    <p>• Allows Analysts to define visual priority of charts.</p>
+                    <p>• More charts per screen, less vertical scroll.</p>
+                    <p>• Supports rich media tiles like logos, images, and external links for enhanced storytelling.</p>
+                </div>
+
+                <!-- 12 column grid starts -->
+                <div class="container section_10 mt70">
+                    <!-- Image Container 1 -->
+                    <div class="gif-container-big">
+                        <img src="Images/tile_size.gif" alt="Tile Size" class="gif-image">
+                    </div>
+                    <div class="caption_left mt12">12 COLUMN GRID STRUCTURE</div>
+                </div>
+
+                <!-- Pin to pinboard starts -->
+                <div id="pin_to_pinboard" class="mini_container column_container section_11 mt150">
+                    <div class="section_title titleColor mb12">Redesigning the “Pin to Pinboard” Experience</div>
+                    <p>The earlier ‘Pin to Pinboard’ flow was a low-intent, one-way interaction. Users had limited 
+                        clarity on where a chart would land, often resulting in cluttered dashboards and fragmented insights. 
+                        To address this, we redesigned the flow as a more intentional, guided curation process.</p>
+                    <br>
+                    <p class="bold mb8">Phase 1 Logic</p>
+                    <p>Implement a rule-based recommendation system:</p>
+                    <p>• Prioritise recently used Pinboards.</p>
+                    <p>• Match chart titles/keywords with Pinboard names or tab labels.</p>
+                    <p>• Tag the top result as Recommended.</p>
+                    <br>
+                    <p class="bold mb8">Phase 2 Logic</span></p>
+                    <p>Introduce ML-backed scoring using user pinning history, content similarity, and usage patterns 
+                        to deliver more personalized and accurate Pinboard suggestions over time.</p>
+                </div>
+
+                <div class="container section_12 mt70">
+                    <!-- Image Container 1 -->
+                    <div class="gif-container-big">
+                        <img src="Images/PintoPinboard.gif" alt="Pin to Pinboard" class="gif-image">
+                    </div>
+                    <div class="caption_left mt12">PIN CHART TO PINBOARD</div>
+                </div>
+
+                <!-- project status starts -->
+                <div id="project_status" class="mini_container column_container section_13 mt150">
+                    <p class="bold mb8">Project Status</p>
+                    <p>Partially launched in 2022</p>
+                    <br>
+                    <p class="bold mb8">Key Metrics</p>
+                    <p>1. Adoption & Usage</p>
+                    <p>• % Increase in Pinboard creations (after redesign rollout).</p>
+                    <p>• % of users using Edit Mode vs View Mode (segmented by persona: analyst vs business user).</p>
+                    <p>• % of Pinboards with multiple Tabs (indicates organisation behaviour).</p>
+                    <br>
+                    <p>2. Engagement & Retention</p>
+                    <p>• % Increase in filter usage (showing interaction depth).</p>
+                    <p>• % of Pinboards with multiple Tabs (indicates organisation behaviour).</p>
+                    <br>
+                    <p>3. Qualitative Feedback</p>
+                    <p>• % No. of support tickets related to Pinboard layout or chart management (should drop).</p>
+                    <p>• % Analyst vs Business User NPS (Net Promoter Score) for dash boarding.</p>
+                </div>
+
+            </div><!-- PROJECT CONTAINER ENDS -->
+
+            <!-- FOOTER STARTS HERE -->
+            <footer class="project_4 mb30 mt150">
+                <div class="footer-container">
+                    <!-- Logo Section -->
+                    <div class="footer-logo">
+                        <a href="index.html" alt="Parul Bhatti Logo">
+                            <div class="hero_img" style="width:55px; height:50px"></div>
+                        </a>
+                    </div>
+                    
+                    <!-- Socials Section -->
+                    <div class="footer-socials">
+                        <div class="socials-content">
+                            <div class="socials-links">
+                                <a href="mailto:parul.bhatti@gmail.com?Subject=Hello" target="_top" class="contact">Email</a>
+                                <span class="separator">•</span>
+                                <a href="https://www.instagram.com/popping_bubblewrap?igsh=cHF5Z250Z2p4Ynd4&utm_source=qr" target="_blank" class="contact">Instagram</a>
+                                <span class="separator">•</span>
+                                <a href="https://twitter.com/parul_bhatti" target="_blank" class="contact">Twitter</a>
+                                <span class="separator">•</span>
+                                <a href="https://dribbble.com/pa_rulz" target="_blank" class="contact">Dribbble</a>
+                            </div>
+                            <div class="footer-message">Last updated, Jul 2025</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Navigation Section -->
+                    <div class="footer-nav">
+                        <a href="numberz.html">
+                            <div class="next_project">
+                                <div class="next_icon"></div>
+                                <div class="project_group">
+                                    <div class="project_title">numberz</div>
+                                    <div class="project_time">2017-18</div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </footer><!-- FOOTER CONTAINER ENDS -->
+
+        </main>
+
+    </div><!-- HOME PAGE CONTAINER ENDS -->
+</body>
+
+</html> 
