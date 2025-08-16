@@ -2549,3 +2549,36 @@ footer .nav {
         height: 16px;
     }
 }
+
+/* Coming Soon Tag Styles */
+.project_thumbnail {
+    position: relative;
+}
+
+.coming-soon-tag {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background-color: #0A0A0D;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    font-family: 'Inter', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    z-index: 10;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Mobile responsive for coming soon tag */
+@media only screen and (min-width: 341px) and (max-width: 667px) {
+    .coming-soon-tag {
+        top: 8px !important;
+        right: 8px !important;
+        padding: 4px 8px !important;
+        font-size: 10px !important;
+        border-radius: 6px !important;
+    }
+}
