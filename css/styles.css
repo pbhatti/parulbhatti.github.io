@@ -671,8 +671,8 @@ header.hero p {
     transform: translateX(-50%);
     background-color: #0A0A0D;
     color: white;
-    padding: 8px 12px;
-    border-radius: 6px;
+    padding: 6px 10px;
+    border-radius: 8px;
     font-size: 12px;
     font-weight: 400;
     white-space: nowrap;
