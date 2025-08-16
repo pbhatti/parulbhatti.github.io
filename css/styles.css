@@ -438,7 +438,7 @@ a:hover, button:hover, .project_card:hover {
 
     /* Ensure images don't overflow */
     img {
-        max-width: 100% !important;
+        /* max-width: 100% !important; */
         height: auto !important;
     }
 
@@ -680,7 +680,6 @@ header.hero p {
     opacity: 1;
     pointer-events: none;
 }
-
 
 @keyframes fadeIn {
     to {
@@ -1867,7 +1866,7 @@ footer .nav {
 
 .footer-message {
     font-family: 'Inter';
-    font-size: 12px;
+    font-size: 14px;
     color: #121217;
     opacity: 0.5;
     text-align: center;
